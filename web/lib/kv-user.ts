@@ -11,9 +11,12 @@ export function userKeys(email: string) {
     desiredStyle:    `${p}:desired_style`,
     desiredStyleRev: `${p}:desired_style_rev`,
     userToken:       `${p}:token`,
+    joinedAt:        `${p}:joined_at`,
   };
 }
 
 export function tokenLookupKey(token: string) {
   return `t:${token}`;
 }
+
+export const USERS_SET_KEY = "siterelay:users";

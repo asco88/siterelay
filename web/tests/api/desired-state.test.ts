@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { kvMock, setSession } from "../setup";
 import { GET } from "@/app/api/get-desired-state/route";
