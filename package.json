@@ -1,0 +1,24 @@
+{
+  "name": "omni-state",
+  "version": "1.0.0",
+  "description": "Real-time remote dashboard for self-hosters. Monitor your Home Assistant instance and Linux servers from anywhere — no VPN, no port forwarding, no cloud subscription required for the core experience.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asco88/siterelay.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asco88/siterelay/issues"
+  },
+  "homepage": "https://github.com/asco88/siterelay#readme",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
