@@ -85,6 +85,36 @@ describe("GET /api/get-style (agent — desired)", () => {
   });
 });
 
+describe("style round-trip (regression: changes must survive a page refresh)", () => {
+  it("style saved by browser is immediately readable back via get-style", async () => {
+    setSession(EMAIL);
+    const style = { theme: "light", accent: "#10b981", sectionOrder: ["radio", "sensors"] };
+
+    // Browser saves layout change
+    await setStyle(browserReq("POST", style));
+
+    // Browser refreshes — reads style back
+    const getReq = new NextRequest("http://localhost/api/get-style");
+    const res = await GET(getReq);
+    const body = await res.json();
+
+    // Must match what was saved — this was the bug: it returned null instead
+    expect(body.style).toMatchObject({ theme: "light", accent: "#10b981" });
+    expect((body.style as { sectionOrder: string[] }).sectionOrder).toEqual(["radio", "sensors"]);
+  });
+
+  it("set-style writes to both styleData and desiredStyle", async () => {
+    setSession(EMAIL);
+    const style = { theme: "dark" };
+    await setStyle(browserReq("POST", style));
+
+    // Agent can still pick up the desired style
+    expect(kvMock._store.get(keys.desiredStyle)).toMatchObject(style);
+    // Browser can read it back directly
+    expect(kvMock._store.get(keys.styleData)).toMatchObject(style);
+  });
+});
+
 describe("POST /api/set-style", () => {
   it("returns 401 when not logged in", async () => {
     const res = await setStyle(browserReq("POST", { theme: "dark" }));

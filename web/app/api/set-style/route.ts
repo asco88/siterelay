@@ -16,6 +16,13 @@ export async function POST(req: NextRequest) {
   }
 
   const rev = Date.now();
-  await kv.mset({ [keys.desiredStyle]: body, [keys.desiredStyleRev]: rev });
+  // Write to both desiredStyle (for agent) and styleData (so browser reads it back
+  // immediately on refresh, even when the agent is offline)
+  await kv.mset({
+    [keys.desiredStyle]:    body,
+    [keys.desiredStyleRev]: rev,
+    [keys.styleData]:       body,
+    [keys.styleUpdatedAt]:  rev,
+  });
   return NextResponse.json({ ok: true, rev });
 }
