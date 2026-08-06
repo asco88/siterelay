@@ -48,6 +48,20 @@ _Last updated: 2026-08-06_
 - Entity IDs kept as `sensor.omnistate_*` to preserve existing dashboards/automations
 - HA back online; integration shows `domain: siterelay, title: SiteRelay, state: loaded`
 
+### Home Assistant Cleanup — Entity IDs, Config URL, Orphaned Device (2026-08-06)
+- Took a Proxmox snapshot (`pre-siterelay-entity-rename-20260806`) before making changes
+- Stopped HA VM, mounted `/dev/pve/vm-101-disk-1` via `losetup -fP` (partition 8, `hassos-data`, ext4) — `kpartx`/`partx` failed on this LV, `losetup -fP` worked
+- Backed up full `.storage/` to `/root/ha-storage-backup-20260806` on the Proxmox host before editing
+- Renamed all 8 entity_ids: `sensor.omnistate_last_seen/cpu_usage/memory/disk/network_rx/solar_power/solar_battery` and `binary_sensor.omnistate_server` → `siterelay_*` equivalents, in `core.entity_registry`
+- Updated `core.config_entries` for the `siterelay` domain: `data.url` and `unique_id` from `https://omni-state.vercel.app` → `https://siterelay.app` (token untouched)
+- Deleted an orphaned leftover "OmniState" device from `core.device_registry` (0 entities referenced it — the May migration had left both an old and new device record)
+- Confirmed no dashboards/automations (`automations.yaml`, lovelace configs) referenced the old entity_ids — nothing else to fix there
+- Verified post-restart: HA `state: RUNNING`, `siterelay` in loaded components, `omnistate` not present, all 8 entities reporting live under new names
+- **Found + fixed a related bug this surfaced:** the deployed `real_sensors.py` on the Linux server (10.0.0.182) still hardcoded `sensor.omnistate_status` and filtered `_SENSOR_SKIP_PREFIXES = ("sensor.omnistate_",)` — after the entity rename this would have caused the collector to re-ingest its own pushed sensors as if external (feedback loop). The local repo already had this fixed (`siterelay_status` / `siterelay_` prefix) but it had never been deployed. Rsynced `agent.py` + `real_sensors.py` to the server and restarted `siterelay.service` + `real-sensors.service` — both confirmed healthy, `sensor.siterelay_status` now live, old `sensor.omnistate_status` frozen/stale
+- Renamed the Linux server systemd unit `omnistate.service` → `siterelay.service` (same file content, `Description=SiteRelay Agent` was already correct); old unit file removed
+- Note: `real-sensors.service`'s own systemd `Description=` still reads "OmniState Real Sensor Collector" — not renamed (out of scope, unit filename was never omnistate-based)
+- Minor leftover: the old `sensor.omnistate_status` state entry is now stale/frozen in HA (nothing pushes to it anymore) — safe to manually delete via Settings → Devices & Services → Entities if desired, purely cosmetic
+
 ---
 
 ## HACS Submission
@@ -69,17 +83,19 @@ Entry confirmed in `integration` file: `"asco88/siterelay"`
 | Component | Host | Details |
 |-----------|------|---------|
 | HA VM | Proxmox VM 101, IP 10.0.0.173 | HAOS, LVM disk `/dev/pve/vm-101-disk-1` |
-| Linux server agent | VM 102, IP 10.0.0.182 | `omnistate` systemd service + `real-sensors` service |
+| Linux server agent | VM 102, IP 10.0.0.182 | `siterelay` systemd service (renamed from `omnistate` 2026-08-06) + `real-sensors` service |
 | Proxmox host | 10.0.0.30 | node: `assafco`, SSH as root |
 
 ---
 
 ## Known Issues / Pending
 
-- [ ] Entity IDs in user's HA still say `omnistate_*` — cosmetic only, can rename in HA UI
+- [x] ~~Entity IDs in user's HA still say `omnistate_*`~~ — renamed to `siterelay_*` 2026-08-06
 - [ ] HACS PR #9788 (successor to closed #7986) — all checks passing, awaiting maintainer merge
-- [ ] Linux server agent service is still named `omnistate` — could rename to `siterelay` if desired
-- [ ] The siterelay.app production URL should replace `omni-state.vercel.app` in HA config entry data (currently stored token still works, just the URL label is old)
+- [x] ~~Linux server agent service is still named `omnistate`~~ — renamed to `siterelay.service` 2026-08-06
+- [x] ~~The siterelay.app production URL should replace `omni-state.vercel.app` in HA config entry data~~ — updated 2026-08-06
+- [ ] Old `sensor.omnistate_status` entity is now stale in HA (nothing pushes to it anymore) — cosmetic, safe to delete manually via HA UI
+- [ ] `real-sensors.service`'s systemd Description still says "OmniState Real Sensor Collector" — cosmetic only
 
 ---
 
