@@ -1,6 +1,6 @@
 # SiteRelay — Project Status
 
-_Last updated: 2026-08-06_
+_Last updated: 2026-10-25_
 
 ---
 
@@ -91,7 +91,7 @@ Entry confirmed in `integration` file: `"asco88/siterelay"`
 ## Known Issues / Pending
 
 - [x] ~~Entity IDs in user's HA still say `omnistate_*`~~ — renamed to `siterelay_*` 2026-08-06
-- [ ] HACS PR #9788 (successor to closed #7986) — all checks passing, awaiting maintainer merge
+- [ ] HACS PR #9788 (successor to closed #7986) — 2026-10-17 frenck requested changes: release must include LICENSE file at archive root. Addressed 2026-10-25: cut v1.1.0 from main (includes LICENSE + all 21 commits since v1.0.0), manifest version bumped to match, PR marked ready, review re-requested
 - [x] ~~Linux server agent service is still named `omnistate`~~ — renamed to `siterelay.service` 2026-08-06
 - [x] ~~The siterelay.app production URL should replace `omni-state.vercel.app` in HA config entry data~~ — updated 2026-08-06
 - [ ] Old `sensor.omnistate_status` entity is now stale in HA (nothing pushes to it anymore) — cosmetic, safe to delete manually via HA UI
