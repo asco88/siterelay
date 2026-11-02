@@ -11,6 +11,8 @@ type AgentTab  = "guided" | "manual";
 type Step = 1 | 2 | 3;
 
 const REPO = "https://github.com/asco88/siterelay";
+const HACS_DEEP_LINK =
+  "https://my.home-assistant.io/redirect/hacs_repository/?owner=asco88&repository=siterelay&category=integration";
 
 // ── Root ─────────────────────────────────────────────────────────────────────
 
@@ -240,12 +242,54 @@ function Step2HA({ token, onTokenGenerated, onContinue }: {
         onChange={t => setTab(t as HaTab)}
       >
         {tab === "hacs" ? (
-          <Steps items={[
-            <>Open HA → <B>HACS</B> → three-dot menu → <B>Custom repositories</B></>,
-            <>Add <Code>{REPO}</Code> — category: <B>Integration</B></>,
-            <>Search for <B>SiteRelay</B> in HACS → <B>Download</B></>,
-            <>Restart Home Assistant</>,
-          ]} />
+          <>
+            <div
+              className="rounded-2xl border p-5 flex flex-col gap-3"
+              style={{ backgroundColor: "#1e293b", borderColor: "#334155" }}
+            >
+              <p className="text-sm font-medium">
+                SiteRelay is in the <b>default HACS catalog</b> — add it to Home Assistant in
+                one click:
+              </p>
+              <a
+                href={HACS_DEEP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="self-start px-5 py-2.5 rounded-xl text-sm font-medium transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+              >
+                Open in HACS →
+              </a>
+              <p className="text-xs" style={{ color: "#94a3b8" }}>
+                Opens your Home Assistant instance and pre-fills the HACS download dialog for
+                SiteRelay.
+              </p>
+            </div>
+            <p className="text-sm" style={{ color: "#94a3b8" }}>
+              Prefer doing it by hand?
+            </p>
+            <Steps
+              items={[
+                <>Open HA → <B>HACS</B> → search for <B>SiteRelay</B> → <B>Download</B></>,
+                <>Restart Home Assistant</>,
+              ]}
+            />
+            <details>
+              <summary className="text-sm cursor-pointer" style={{ color: "#94a3b8" }}>
+                Not seeing SiteRelay in HACS? (older HACS / stale catalog)
+              </summary>
+              <div className="mt-2">
+                <Steps
+                  items={[
+                    <>Open HA → <B>HACS</B> → three-dot menu → <B>Custom repositories</B></>,
+                    <>Add <Code>{REPO}</Code> — category: <B>Integration</B></>,
+                    <>Search for <B>SiteRelay</B> in HACS → <B>Download</B></>,
+                    <>Restart Home Assistant</>,
+                  ]}
+                />
+              </div>
+            </details>
+          </>
         ) : (
           <Steps items={[
             <>Copy <Code>custom_components/siterelay/</Code> from the <a href={REPO} target="_blank" rel="noopener noreferrer" style={{ color: "#3b82f6" }}>GitHub repo</a> into your HA <Code>/config/custom_components/</Code> directory</>,
