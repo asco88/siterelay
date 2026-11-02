@@ -27,11 +27,25 @@ Real-time remote dashboard for self-hosters. Monitor your Home Assistant instanc
 
 ### Home Assistant integration — HACS
 
-1. Open HACS → ⋮ → Custom repositories
+SiteRelay is part of the **default HACS catalog** — no custom repository needed.
+
+1. Open **HACS** and search for **SiteRelay**
+2. Click **Download**
+3. Restart Home Assistant
+4. Settings → Integrations → Add → SiteRelay → enter your dashboard URL and token
+
+<details>
+<summary>Not seeing SiteRelay in HACS?</summary>
+
+If the default catalog doesn't show it (stale catalog cache, older HACS version), add it
+as a custom repository instead:
+
+1. Open HACS → ⋮ → **Custom repositories**
 2. Add `https://github.com/asco88/siterelay` — category: **Integration**
 3. Search for **SiteRelay** and click Download
-4. Restart Home Assistant
-5. Settings → Integrations → Add → SiteRelay → enter your dashboard URL and token
+4. Restart Home Assistant, then continue with step 4 above
+
+</details>
 
 ### Home Assistant integration — Manual
 
