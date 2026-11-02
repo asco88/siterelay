@@ -326,8 +326,8 @@ class FileHandler(FileSystemEventHandler):
 def main() -> None:
     if not VERCEL_URL:
         raise SystemExit(
-            "Set OMNISTATE_URL to your Vercel deployment URL, e.g.:\n"
-            "  export OMNISTATE_URL=https://siterelay.vercel.app"
+            "Set OMNISTATE_URL to your dashboard URL, e.g.:\n"
+            "  export OMNISTATE_URL=https://siterelay.app"
         )
 
     log.info("SiteRelay agent starting")

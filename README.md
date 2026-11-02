@@ -2,7 +2,7 @@
 
 Real-time remote dashboard for self-hosters. Monitor your Home Assistant instance and Linux servers from anywhere — no VPN, no port forwarding, no cloud subscription required for the core experience.
 
-**[→ siterelay.vercel.app](https://siterelay.vercel.app)**
+**[→ siterelay.app](https://siterelay.app)**
 
 ---
 
@@ -19,7 +19,7 @@ Real-time remote dashboard for self-hosters. Monitor your Home Assistant instanc
 
 ### Hosted (easiest)
 
-1. Go to **[siterelay.vercel.app](https://siterelay.vercel.app)** and sign in with Google
+1. Go to **[siterelay.app](https://siterelay.app)** and sign in with Google
 2. Click **Add integration → Home Assistant**
 3. Install the SiteRelay integration via HACS (or manually)
 4. Generate a token in the wizard and paste it into HA

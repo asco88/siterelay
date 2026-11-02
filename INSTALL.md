@@ -31,7 +31,7 @@ SiteRelay is a personal server dashboard that shows live system metrics and smar
    npx vercel --prod   # deploy to production
    ```
 
-3. Note the production URL shown at the end (e.g. `https://siterelay.vercel.app`).
+3. Note the production URL shown at the end (e.g. `https://siterelay.app`).
 
 > You only do this once. After that, `npx vercel --prod` redeploys in ~30 s.
 
@@ -73,7 +73,7 @@ The script will ask for three things:
 
 | Prompt | Example value |
 |--------|---------------|
-| Vercel URL | `https://siterelay.vercel.app` |
+| Vercel URL | `https://siterelay.app` |
 | HA URL | `http://homeassistant.local:8123` |
 | HA Token | `eyJhbGci...` (from Step 2) |
 
